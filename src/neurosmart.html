@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Neurosmart</title>
+		<link rel="stylesheet" href="resources/style.css" title="Main" type="text/css" media="screen" charset="utf-8">
+		<script src="js/scenario.js"></script>
+		<script src="js/brain.js"></script>
+		<script>
+			window.onload = function(){
+				var scenario = new Scenario();
+				scenario.scenarioPlayer.nextStep();
+			}
+		</script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="console">
+				<div class="textArea">
+					<p>Ceci est un exemple de texte</p>
+					<p>en html</p>
+				</div>
+			</div>
+			<div id="media">
+				Media
+			</div>
+			<div id="brain">
+				
+			</div>
+			<div id="controls">
+				<div class="arrow_previous" onclick="previousStep()">
+				</div>
+				<div class="arrow_next" onclick="nextStep()">
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

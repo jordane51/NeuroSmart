@@ -1,0 +1,94 @@
+body{
+	background: url("background.png") no-repeat center bottom fixed;
+	background-size: cover;
+	background-color: #2A2A2A;
+	height: 100%;
+	width: 100%;
+	margin: 0 0 0 0;
+}
+
+#wrapper{
+	min-width: 768px;
+	width: 100%;
+	height: 100%;
+}
+
+
+/* Console View */
+
+#console{
+	padding: 5px 5px 5px 5px;
+	margin: 10px 0px 0px 10px;
+	background: rgba(255,255,255,0.15);
+	border: 1px solid #979797;
+	border-radius: 2px;
+	width: 50vw;
+	height: 30vh;
+	overflow-y: auto;
+}
+
+#console .textArea{
+	color: white;
+}
+
+#console .textArea p{
+	margin: 0px 0px 0px 0px;
+}
+
+/* Brain View */
+
+#brain{
+	padding: 5px 5px 5px 5px;
+	margin: 10px 10px 10px 10px;
+	background: rgba(255,255,255,0.15);
+	border: 1px solid #979797;
+	border-radius: 2px;
+	width: 40vw;
+	height: 40vw;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+#brain canvas{
+	height: 100px;
+	width: 100px;
+}
+
+/* Media View */
+
+#media{
+	padding: 5px 5px 5px 5px;
+	margin: 10px 10px 10px 10px;
+	background: rgba(255,255,255,0.15);
+	border: 1px solid #979797;
+	border-radius: 2px;
+	width: 50vw;
+	height: 50vw;
+	max-height: 50vh;
+}
+
+/* Controls View */
+
+#controls{
+	float: left;
+	margin-left: 10px;
+}
+
+#controls .arrow_next{
+	width: 50px;
+	height: 50px;
+	background-image: url("arrow_next.png");
+	float: left;
+	margin-left: 10px;
+}
+
+#controls .arrow_previous{
+	width: 50px;
+	height: 50px;
+	background-image: url("arrow_previous.png");
+	float: left;
+	
+}
+
+

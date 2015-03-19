@@ -1,0 +1,22 @@
+{
+	"sequences": [
+		{
+			"id": 1,
+			"actions": [
+				{"action":"printConsole", "value":"<p>Messsage !</p>"}
+			]
+		},
+		{
+			"id": 2,
+			"actions": [
+				{"action":"printConsole", "value":"<p>La zone du cerveau x s'active</p>"}
+			]
+		},
+		{
+			"id": 3,
+			"actions": [
+				{"action":"printConsole", "value":"<p>Ceci est un message de test</p>"}
+			]
+		}
+	]
+}
