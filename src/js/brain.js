@@ -7,6 +7,14 @@ NS.BrainModule = function(domElement){
 	this._isLoaded = false;
 };
 
+NS.BrainModule.prototype.availableCommands = function(){
+	return ["tbd"];
+}
+
+NS.BrainModule.prototype.performCommand = function(command){
+	
+};
+
 NS.BrainModule.prototype.isLoaded = function(){
 	return this._isLoaded;
 };

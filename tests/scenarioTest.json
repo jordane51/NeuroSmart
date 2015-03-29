@@ -2,40 +2,43 @@
 	"options": {"showConsole":true, "showBrain":true, "showMedia":true},
 	"media": [
 		{
-			"id":"image1",
-			"type":"image",
-			"url":"image1.png"
+			"image1":{
+				"type":"image",
+				"url":"http://i.forbesimg.com/media/lists/companies/google_416x416.jpg"
+			}
 		},
 		{
-			"id":"image2",
-			"type":"image",
-			"url":"image2.png"
+			"image2":{
+				"type":"image",
+				"url":"http://i.imgur.com/hbh7Q.png"
+			}
 		},
 		{
-			"id":"vid1",
-			"type":"video",
-			"url":["video.ogg", "video.mp4"]
+			"vid1":{
+				"type":"video",
+				"url":"http://techslides.com/demos/sample-videos/small.mp4"
+			}
 		}
 	],
 	"sequences": [
 		{
 			"id": 1,
 			"actions": [
-				{"action":"printConsole", "value":"<p>Messsage !</p>"},
+				{"action":"printLine", "value":"<p>Messsage !</p>"},
 				{"action":"showMedia", "media":"image1"}
 			]
 		},
 		{
 			"id": 2,
 			"actions": [
-				{"action":"printConsole", "value":"<p>La zone du cerveau x s'active</p>"},
+				{"action":"printLine", "value":"<p>La zone du cerveau x s'active</p>"},
 				{"action":"showMedia", "media":"image2"}
 			]
 		},
 		{
 			"id": 3,
 			"actions": [
-				{"action":"printConsole", "value":"<p>Ceci est un message de test</p>"},
+				{"action":"printLine", "value":"<p>Ceci est un message de test</p>"},
 				{"action":"showMedia", "media":"vid1"}
 			]
 		}

@@ -10,12 +10,12 @@
 			var scenario;
 			window.onload = function(){
 				scenario = new NS.Scenario(document.getElementById("wrapper"));
-				scenario.init();
+				scenario.playScenario("http://pdp.jord.fr/~jordane/tests/scenarioTest.json");
 				
 				// Disables the bounce effect in safari mobile
-				document.addEventListener("touchmove", function(event){
+				/*document.addEventListener("touchmove", function(event){
 					event.preventDefault();
-				});
+				});*/
 			}
 		</script>
 	</head>

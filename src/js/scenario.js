@@ -8,6 +8,7 @@ var NS = NS || {};
  */
 NS.Scenario = function(containerElement){
 	this._scenarioPlayer = null;
+	this._scenarioUrl = null;
 	this._brainModule = null;
 	this._consoleModule = null;
 	this._mediaModule = null;
@@ -17,14 +18,14 @@ NS.Scenario = function(containerElement){
 };
 
 /* function init
- *	This function initializes displays a spinning wheel, initializes the modules, launches the scenarioPlayer, then inserts all the modules in the DOM so they are displayed
+ *	This function initializes displays a spinning wheel, initializes the modules, launches the scenarioPlayer, then loads all the modules in the DOM so they are displayed
  */
 NS.Scenario.prototype.init = function(){	
 	var spinningWheel = new NS.SpinningWheel(this._containerElement);
 	spinningWheel.show();
 
 	var callback = function(){
-		if(this._consoleModule.isLoaded() && this._mediaModule.isLoaded() && this._brainModule.isLoaded()){
+		if(this._consoleModule.isLoaded() && this._mediaModule.isLoaded() && this._brainModule.isLoaded() && this._scenarioPlayer.isLoaded()){
 			this._consoleModule.show();
 			this._brainModule.show();
 			this._mediaModule.show();
@@ -33,37 +34,81 @@ NS.Scenario.prototype.init = function(){
 		}		
 	};
 	
+	
+	
 	this._brainModule = new NS.BrainModule(this._containerElement);
 	this._consoleModule = new NS.ConsoleModule(this._containerElement);
 	this._mediaModule = new NS.MediaModule(this._containerElement);
-	this._controlsModule = new NS.ControlsModule(this._containerElement, null);
 	
-	// Those modules are asynchronous, thus the need for a callback whereas the others don't need one
+	this._scenarioPlayer = new NS.ScenarioPlayer(this._scenarioUrl, this._mediaModule, this._consoleModule, this._brainModule);
+	this._controlsModule = new NS.ControlsModule(this._containerElement, this._scenarioPlayer, this._scenarioPlayer.previousStep, this._scenarioPlayer.nextStep);
+
+	// Those modules "load" methods are asynchronous, thus the need for a callback while the others don't need one
 	this._brainModule.load(this, callback);
 	this._consoleModule.load(this, callback);
 	this._mediaModule.load(this, callback);
 	
-	this._scenarioPlayer = new NS.ScenarioPlayer(null);
+	
+	this._scenarioPlayer.load(this, callback);
+};
+
+NS.Scenario.prototype.playScenario = function(scenarioUrl){
+	this._scenarioUrl = scenarioUrl;
+	scenario.init();
 };
 
 
 /* Class ScenarioPlayer
- * Is responsible for loading the scenario file, loading the media files, and playing the scenario	
+ * Is responsible for loading the scenario file, preloading the media files, and playing the scenario	
  */
-NS.ScenarioPlayer = function(scenarioUrl, containerElement){
+NS.ScenarioPlayer = function(scenarioUrl, mediaModule, consoleModule, brainModule){
 	this._scenarioUrl = scenarioUrl;
+	this._mediaModule = mediaModule;
+	this._consoleModule = consoleModule;
+	this._brainModule = brainModule;
+	
+	this._scenario = null;
 	this._currentStep = -1;
+	this._numberOfSteps = 0;
 	this._isLoaded = false;
+	this._commandDispatcher = null;
 };
 /* 
- * Preloads all the resources necessary, such as the scenario(json) itself, and some resources (images) - videos are not preloaded by default
+ * Preloads all the resources necessary, such as the scenario(json) itself, and some resources (images) - videos are not preloaded
  * param: callback: called when everything is loaded
  */
-NS.ScenarioPlayer.prototype.load = function(callback){
-	this._consoleModule = new NS.ConsoleModule(document.body);
-	this._mediaModule = new NS.MediaModule(document.body);
+NS.ScenarioPlayer.prototype.load = function(caller, callback){
+	var scenarioLoadingHandler = function(scenario){
+		this._scenario = JSON.parse(scenario);
+		this._numberOfSteps = this._scenario["sequences"].length;
+		
+		// This preloads all of the media declared in the "media" property of a scenario into MediaModule
+		var medias = this._scenario["media"];
+		for(var i = 0; i < medias.length; i++){
+			this._mediaModule.addMedia(medias[i]);
+		}
+		
+		this._isLoaded = true;
+		callback.call(caller);
+	};
 	
-	this._isLoaded = true;
+	/*
+	This fetches the available commands of all the modules and adds them to the commandDispatcher,
+	which is an associative array formed as such: commandDispatcher["command"] -> object
+	This allow us to know which command is addressed to which object later on
+	*/
+	var modules = [this._mediaModule, this._consoleModule, this._brainModule];
+	
+	this._commandDispatcher = []
+	
+	for(var i = 0; i < modules.length; i++){
+		var commands = modules[i].availableCommands();
+		for(var j = 0; j < commands.length; j++){
+			this._commandDispatcher[commands[j]] = modules[i];
+		}
+	}
+	
+	NS.Utilities.asyncLoadTextFile(this._scenarioUrl, this, scenarioLoadingHandler);
 };
 
 NS.ScenarioPlayer.prototype.isLoaded = function(){
@@ -71,12 +116,38 @@ NS.ScenarioPlayer.prototype.isLoaded = function(){
 };
 
 NS.ScenarioPlayer.prototype.nextStep = function(){
-	
+	if(this._currentStep < this._numberOfSteps-1){
+		this._currentStep++;
+		this.playCurrentStep();
+	}
 };
 
 NS.ScenarioPlayer.prototype.previousStep = function(){
-	
+	if(this._currentStep > 0){
+		this._currentStep--;
+		this.playCurrentStep();
+	}
 };
+
+NS.ScenarioPlayer.prototype.playCurrentStep = function(){
+	var actions = this._scenario["sequences"][this._currentStep]["actions"];
+	for(var i = 0; i < actions.length; i++){
+		var action = actions[i];
+		var actionName = action["action"];
+		var fn = this._commandDispatcher[actionName];
+
+		var parameters = [];
+		var properties = Object.getOwnPropertyNames(action);
+		
+		for(var j = 0; j < properties.length; j++){
+			var property = properties[j];
+			parameters.push(action[property]);
+		}
+		
+		fn.performCommand.apply(this._commandDispatcher[actionName], parameters);
+	}	
+};
+
 
 /* Class SpinningWheel
  * Simple class that displays an activity indicator
@@ -104,6 +175,22 @@ NS.ConsoleModule = function(domElement){
 	this._parentDomElement = domElement;
 	this._domElement = null;
 	this._isLoaded = false;
+};
+
+NS.ConsoleModule.prototype.availableCommands = function(){
+	return ["printHtml", "printLine"];
+};
+
+NS.ConsoleModule.prototype.performCommand = function(){
+	switch(arguments[0]){
+		case "printLine":
+			this.printLine(arguments[1]);
+			break;
+		case "printHtml":
+			this.printHTML(arguments[1]);
+			break;
+		default:
+	}
 };
 
 NS.ConsoleModule.prototype.isLoaded = function(){
@@ -145,8 +232,22 @@ NS.ConsoleModule.prototype.clear = function(){
 NS.MediaModule = function(domElement){
 	this._parentDomElement = domElement;
 	this._domElement = null;
-	this._media = null;
+	this._displayedMedia = null;
+	this._mediaList = [];
 	this._isLoaded = false;
+};
+
+NS.MediaModule.prototype.availableCommands = function(){
+	return ["showMedia"];
+};
+
+NS.MediaModule.prototype.performCommand = function(command){
+	switch(arguments[0]){
+		case "showMedia":
+			this.setMedia(this._mediaList[arguments[1]]);
+			break;
+		default:
+	}
 };
 
 NS.MediaModule.prototype.isLoaded = function(){
@@ -170,9 +271,27 @@ NS.MediaModule.prototype.hide = function(){
 	 this._parentDomElement.removeChild(this._domElement);
 };
 
+NS.MediaModule.prototype.addMedia = function(media){
+	var mediaName = Object.getOwnPropertyNames(media);
+	var mediaProperties = media[mediaName];
+	
+	var mediaObject;
+	switch(mediaProperties["type"]){
+		case "image":
+			mediaObject = new NS.Image(mediaProperties["url"]);
+		break;
+		case "video":
+			mediaObject = new NS.Video(mediaProperties["url"]);
+		break;
+		default:
+			mediaObject = new NS.Media("Unknown media type");
+	}
+	this._mediaList[mediaName] = mediaObject;
+}
+
 // Takes a NS.Media as param
 NS.MediaModule.prototype.setMedia = function(media){
-	this._media = media;
+	this._displayedMedia = media;
 	this._domElement.innerHTML = media.htmlContent();
 };
 
@@ -183,10 +302,12 @@ NS.MediaModule.prototype.clear = function(){
 /* Class ControlsModule
  * Responsible for the next and previous arrows that change the current step of the scenario
  */
-NS.ControlsModule = function(domElement, eventHandler){
+NS.ControlsModule = function(domElement, caller, previousStepHandler, nextStepHandler){
 	this._parentDomElement = domElement;
 	this._domElement = null;
-	this._eventHandler = eventHandler;
+	this._caller = caller;
+	this._previousStepHandler = previousStepHandler;
+	this._nextStepHandler = nextStepHandler;
 };
 
 NS.ControlsModule.prototype.show = function(){
@@ -199,12 +320,16 @@ NS.ControlsModule.prototype.show = function(){
 	arrowPrevious.classList.add("arrow_previous");
 	arrowNext.classList.add("arrow_next");
 	
+	var context = this;
+	
 	arrowPrevious.onclick = function(){
-		this._eventHandler.call();
-	}
+		context._previousStepHandler.call(context._caller);	
+	};
+	
 	arrowNext.onclick = function(){
-		this._eventHandler.call();
-	}
+		context._nextStepHandler.call(context._caller);	
+	};
+	
 	
 	this._domElement.appendChild(document.createTextNode(""));
 	this._domElement.appendChild(arrowPrevious);
@@ -253,10 +378,38 @@ NS.Video.prototype = Object.create(NS.Media.prototype);
 NS.Video.prototype.constructor = NS.Video;
 
 NS.Video.prototype.htmlContent = function(){
-	return "<video src=\""+this._resourceUrl+"\"></video>";
+	return "<video src=\""+this._resourceUrl+"\" type=\"video/mp4\" controls preload autoplay>Votre navigateur ne supporte par les vidéos MP4. Impossible d'afficher la vidéo.</video>";
 };
 
 
-/* Class ResourceManager
- * Responsible for downloading and accessing external files such as JSONs and media files
+/* Class Utils
+ * Various utility classes that are useful for the application but don't deserve their own class :p
  */
+NS.Utilities = function(){
+	
+};
+
+/* function asyncLoadFile
+ * Loads the file specified at the url fileUrl then calls the callback
+ * The callback method takes the downloaded resource as parameter
+ */
+NS.Utilities.asyncLoadTextFile = function(fileUrl, caller, callback){
+	var request;
+
+	if(window.XMLHttpRequest){
+		request = new XMLHttpRequest();
+		// the override is required for some versions of firefox
+		request.overrideMimeType('text/xml');
+	} else if(window.ActiveXObject){
+		request = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	request.onreadystatechange = function(){
+		if(request.readyState == 4){
+			callback.call(caller, request.responseText);
+		}
+	};
+	
+	request.open('GET', fileUrl, true);
+	request.send();
+};
