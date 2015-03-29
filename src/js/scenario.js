@@ -378,6 +378,13 @@ NS.Video.prototype = Object.create(NS.Media.prototype);
 NS.Video.prototype.constructor = NS.Video;
 
 NS.Video.prototype.htmlContent = function(){
+	if(this._resourceUrl instanceof Array){
+		res = "<video controls preload autoplay>\n";
+		for(var i = 0; i < this._resourceUrl.length; i++){
+			res+= "<source src=\""+this._resourceUrl[i]+"\"\n>";
+		}
+		return res + "</video>";
+	}
 	return "<video src=\""+this._resourceUrl+"\" type=\"video/mp4\" controls preload autoplay>Votre navigateur ne supporte par les vidéos MP4. Impossible d'afficher la vidéo.</video>";
 };
 

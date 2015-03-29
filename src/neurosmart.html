@@ -3,6 +3,7 @@
 	<head>
 		<title>Neurosmart</title>
 		<link rel="stylesheet" href="resources/style.css" title="Main" type="text/css" media="screen" charset="utf-8">
+		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<script src="js/scenario.js"></script>
 		<script src="js/brain.js"></script>
@@ -13,9 +14,9 @@
 				scenario.playScenario("http://pdp.jord.fr/~jordane/tests/scenarioTest.json");
 				
 				// Disables the bounce effect in safari mobile
-				/*document.addEventListener("touchmove", function(event){
+				document.addEventListener("touchmove", function(event){
 					event.preventDefault();
-				});*/
+				});
 			}
 		</script>
 	</head>
