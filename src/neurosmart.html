@@ -3,18 +3,26 @@
 	<head>
 		<title>Neurosmart</title>
 		<link rel="stylesheet" href="resources/style.css" title="Main" type="text/css" media="screen" charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<script src="js/scenario.js"></script>
 		<script src="js/brain.js"></script>
 		<script>
+			var scenario;
 			window.onload = function(){
-				var scenario = new Scenario();
-				scenario.scenarioPlayer.nextStep();
+				scenario = new NS.Scenario(document.getElementById("wrapper"));
+				scenario.init();
+				
+				// Disables the bounce effect in safari mobile
+				document.addEventListener("touchmove", function(event){
+					event.preventDefault();
+				});
 			}
 		</script>
 	</head>
 	<body>
 		<div id="wrapper">
-			<div id="console">
+		
+			<!--<div id="console">
 				<div class="textArea">
 					<p>Ceci est un exemple de texte</p>
 					<p>en html</p>
@@ -31,7 +39,7 @@
 				</div>
 				<div class="arrow_next" onclick="nextStep()">
 				</div>
-			</div>
+			</div>-->
 		</div>
 	</body>
 </html>

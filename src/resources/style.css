@@ -5,6 +5,7 @@ body{
 	height: 100%;
 	width: 100%;
 	margin: 0 0 0 0;
+	overflow: hidden;
 }
 
 #wrapper{
@@ -13,10 +14,21 @@ body{
 	height: 100%;
 }
 
+#spinningWheel{
+	position: fixed;
+	margin-top: -37px;
+	margin-left: -37px;
+	top: 50%;
+	left: 50%;
+	width: 75px;
+	height: 75px;
+	background-image: url("loading.gif");
+	background-size: 75px 75px;
+}
 
 /* Console View */
 
-#console{
+#consoleModule{
 	padding: 5px 5px 5px 5px;
 	margin: 10px 0px 0px 10px;
 	background: rgba(255,255,255,0.15);
@@ -37,7 +49,7 @@ body{
 
 /* Brain View */
 
-#brain{
+#brainModule{
 	padding: 5px 5px 5px 5px;
 	margin: 10px 10px 10px 10px;
 	background: rgba(255,255,255,0.15);
@@ -50,14 +62,14 @@ body{
 	right: 0px;
 }
 
-#brain canvas{
+#brainModule canvas{
 	height: 100px;
 	width: 100px;
 }
 
 /* Media View */
 
-#media{
+#mediaModule{
 	padding: 5px 5px 5px 5px;
 	margin: 10px 10px 10px 10px;
 	background: rgba(255,255,255,0.15);
@@ -68,14 +80,21 @@ body{
 	max-height: 50vh;
 }
 
+#mediaModule img{
+	max-width: 100%;
+	max-height: 100%;
+	vertical-align: middle;
+}
+
+
 /* Controls View */
 
-#controls{
+#controlsModule{
 	float: left;
 	margin-left: 10px;
 }
 
-#controls .arrow_next{
+#controlsModule .arrow_next{
 	width: 50px;
 	height: 50px;
 	background-image: url("arrow_next.png");
@@ -83,7 +102,7 @@ body{
 	margin-left: 10px;
 }
 
-#controls .arrow_previous{
+#controlsModule .arrow_previous{
 	width: 50px;
 	height: 50px;
 	background-image: url("arrow_previous.png");
