@@ -65,6 +65,7 @@ body{
 #brainModule canvas{
 	height: 100px;
 	width: 100px;
+	display: block;
 }
 
 /* Media View */

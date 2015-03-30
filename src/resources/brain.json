@@ -1,0 +1,16 @@
+{
+	"brain":[
+		{
+			"elementId":"1",
+			"name":"Middle frontal gyrus",
+			"description":"Le Middle frontal gyrus est responsable de ? ",
+			"url":"lh.pial.obj"
+		},
+		{
+			"elementId":"1",
+			"name":"Middle frontal gyrus",
+			"description":"Le Middle frontal gyrus est responsable de ? ",
+			"url":"rh.pial.obj"
+		}
+	]
+}
