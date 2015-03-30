@@ -198,14 +198,14 @@ NS.ConsoleModule.prototype.isLoaded = function(){
 };
 
 NS.ConsoleModule.prototype.load = function(caller, callback){
+	this._domElement = document.createElement("div");
+	this._domElement.id = "consoleModule";
+	
 	this._isLoaded = true;
 	callback.call(caller);
 };
 
 NS.ConsoleModule.prototype.show = function(){
-	this._domElement = document.createElement("div");
-	this._domElement.id = "consoleModule";
-
 	this._domElement.appendChild(document.createTextNode(""));
 	this._parentDomElement.appendChild(this._domElement);
 };
@@ -255,14 +255,14 @@ NS.MediaModule.prototype.isLoaded = function(){
 };
 
 NS.MediaModule.prototype.load = function(caller, callback){
+	this._domElement = document.createElement("div");
+	this._domElement.id = "mediaModule";
+	
 	this._isLoaded = true;
 	callback.call(caller);
 };
 
 NS.MediaModule.prototype.show = function(){
-	this._domElement = document.createElement("div");
-	this._domElement.id = "mediaModule";
-
 	this._domElement.appendChild(document.createTextNode(""));
 	this._parentDomElement.appendChild(this._domElement);
 };
