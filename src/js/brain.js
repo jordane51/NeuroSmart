@@ -11,11 +11,21 @@ NS.BrainModule = function(domElement, brainUrl){
 };
 
 NS.BrainModule.prototype.availableCommands = function(){
-	return ["tbd"];
+	return ["setOpacity", "setColor"];
 }
 
-NS.BrainModule.prototype.performCommand = function(command){
-	
+NS.BrainModule.prototype.performCommand = function(){
+	switch(arguments[0]){
+		case "setOpacity":
+			console.log(arguments[1], arguments[2]);
+			this._nsscene.setOpacity([arguments[1]], arguments[2]);
+		break;
+		case "setColor":
+			this._nsscene.setColor([arguments[1]], arguments[2]);
+		break;
+		default:
+		break;
+	}
 };
 
 NS.BrainModule.prototype.isLoaded = function(){
@@ -39,7 +49,7 @@ NS.BrainModule.prototype.load = function(caller, callback){
 		}
 		
 		for(var i = 0; i < objectsToLoad; i++){
-			this._nsscene.addObject(this._brain[i].elementId, this._brain[i].url, this, objectLoadingHandler);
+			this._nsscene.addObject(this._brain[i].nickName, this._brain[i].opacity, this._brain[i].color, this._brain[i].url, this, objectLoadingHandler);
 		}
 	
 	};
@@ -70,7 +80,7 @@ NS.BrainModule.prototype.hide = function(){
 */
 NS.Scene = function(domElement){
 	this._domElement = domElement;
-	this._sceneObjects = new Array();
+	this._sceneObjects = {};
 	this._scene = null;
 	this._renderer = null;
 	this._camera = null;
@@ -94,30 +104,30 @@ NS.Scene.prototype.load = function(){
 	this._controls.minDistance = 10;
 	
 	// Scene setup
-	var ambient = new THREE.AmbientLight(0xf9fdff);
+	var ambient = new THREE.AmbientLight(0xffffff);
 	this._scene.add(ambient);
 	
-	var pointLight1 = new THREE.PointLight(0xf9fdff, 4, 200);
+	var pointLight1 = new THREE.PointLight(0xffffff, 4, 200);
 	pointLight1.position.set(0, 0, 200);
 	this._scene.add(pointLight1);
 	
-	var pointLight2 = new THREE.PointLight(0xf9fdff, 4, 200);
+	var pointLight2 = new THREE.PointLight(0xffffff, 4, 200);
 	pointLight2.position.set(0, 0, -200);
 	this._scene.add(pointLight2);
 	
-	var pointLight3 = new THREE.PointLight(0xf9fdff, 4, 200);
+	var pointLight3 = new THREE.PointLight(0xffffff, 4, 200);
 	pointLight3.position.set(200, 0, 0);
 	this._scene.add(pointLight3);
 	
-	var pointLight4 = new THREE.PointLight(0xf9fdff, 4, 200);
+	var pointLight4 = new THREE.PointLight(0xffffff, 4, 200);
 	pointLight4.position.set(-200, 0, 0);
 	this._scene.add(pointLight4);
 	
-	var pointLight5 = new THREE.PointLight(0xf9fdff, 4, 200);
+	var pointLight5 = new THREE.PointLight(0xffffff, 4, 200);
 	pointLight5.position.set(0, 200, 0);
 	this._scene.add(pointLight5);
 	
-	var pointLight6 = new THREE.PointLight(0xf9fdff, 4, 200);
+	var pointLight6 = new THREE.PointLight(0xffffff, 4, 200);
 	pointLight6.position.set(0, -200, 0);
 	this._scene.add(pointLight6);
 	
@@ -144,23 +154,54 @@ NS.Scene.prototype.load = function(){
 		that._controls.update();
 		that._renderer.render(that._scene, that._camera);
 	}
+	
+	//function clickHandler(event){
+		/*var positionInView;
+		positionInView.x = */
+	//	console.log(event.x, event.y);
+	//}
+	
+	//this.renderer.domElement.onclick = clickHandler;
 }
 
 NS.Scene.prototype.addComponentsToScene = function(){
-	for(var i = 0; i < this._sceneObjects.length; i++){
-		this._scene.add(this._sceneObjects[i]);
-	}	
+	var keys = Object.getOwnPropertyNames(this._sceneObjects);
+	for(var i = 0; i < keys.length; i++){
+		this._scene.add(this._sceneObjects[keys[i]]);
+	}
 };
 
-NS.Scene.prototype.addObject = function(objectId, objectUrl, caller, callback){
+NS.Scene.prototype.addObject = function(nickName, objectOpacity, objectColor, objectUrl, caller, callback){
 	var objectLoader = new THREE.OBJLoader();
 	
 	var that = this;
-	objectLoader.load( "http://pdp.jord.fr/~jordane/src/resources/"+objectUrl, function(object){
-					object.children[0].material = new THREE.MeshPhongMaterial({ wireframe: false, ambient: 0x555555, color: 0x21b6ff, specular: 0xffffff, shininess: 80, shading: THREE.SmoothShading, transparent: true, opacity: 0.5 });
-					that._sceneObjects.push(object);
+	objectLoader.load(objectUrl, function(object){
+					object.children[0].material = new THREE.MeshPhongMaterial({ wireframe: false, ambient: 0x555555, color: objectColor, specular: 0xffffff, shininess: 20, shading: THREE.SmoothShading, transparent: true, opacity: objectOpacity });
+					that._sceneObjects[nickName] = object;
 					callback.call(caller);
 	});
+};
+
+/* 
+ * Sets the opacity of the objects with the given nicknames
+ * Opacity ranges from 0 to 1
+ */
+NS.Scene.prototype.setOpacity = function(arrayOfNickNames, opacity){
+	for(var i = 0; i < arrayOfNickNames.length; i++){
+		var object = this._sceneObjects[arrayOfNickNames[i]].children[0];
+		object.material.opacity = opacity;
+	}
+};
+
+/*
+ * Sets the color of the objects with the given nicknames
+ * Color is specified as a string of hex color
+ */
+NS.Scene.prototype.setColor = function(arrayOfNickNames, color){
+	for(var i = 0; i < arrayOfNickNames.length; i++){
+		var object = this._sceneObjects[arrayOfNickNames[i]].children[0];
+		object.material.color = new THREE.Color(color);
+	}
 };
 
 NS.AnimationManager = function(){

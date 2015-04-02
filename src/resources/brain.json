@@ -1,16 +1,20 @@
 {
 	"brain":[
 		{
-			"elementId":"1",
+			"nickName":"lh",
 			"name":"Middle frontal gyrus",
 			"description":"Le Middle frontal gyrus est responsable de ? ",
-			"url":"lh.pial.obj"
+			"color":"#EE4000",
+			"opacity":"0.3",
+			"url":"http://pdp.jord.fr/~jordane/src/resources/lh.pial.obj"
 		},
 		{
-			"elementId":"1",
+			"nickName":"rh",
 			"name":"Middle frontal gyrus",
 			"description":"Le Middle frontal gyrus est responsable de ? ",
-			"url":"rh.pial.obj"
+			"color":"#EE4000",
+			"opacity":"0.3",
+			"url":"http://pdp.jord.fr/~jordane/src/resources/rh.pial.obj"
 		}
 	]
 }

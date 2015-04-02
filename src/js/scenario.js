@@ -332,7 +332,7 @@ NS.ControlsModule.prototype.show = function(){
 	
 	
 	this._domElement.appendChild(document.createTextNode(""));
-	this._domElement.appendChild(arrowPrevious);
+	
 	this._domElement.appendChild(arrowNext);
 	
 	this._parentDomElement.appendChild(this._domElement);

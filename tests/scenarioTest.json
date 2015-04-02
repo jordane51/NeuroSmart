@@ -31,14 +31,17 @@
 			"id": 1,
 			"actions": [
 				{"action":"printLine", "value":"<p>Messsage !</p>"},
-				{"action":"showMedia", "media":"image1"}
+				{"action":"showMedia", "media":"image1"},
+				{"action":"setOpacity", "object":"lh", "value":"0.0"}
 			]
 		},
 		{
 			"id": 2,
 			"actions": [
 				{"action":"printLine", "value":"<p>La zone du cerveau x s'active</p>"},
-				{"action":"showMedia", "media":"image2"}
+				{"action":"showMedia", "media":"image2"},
+				{"action":"setOpacity", "object":"lh", "value":"1.0"},
+				{"action":"setColor", "object":"lh", "value":"#20B2AA"}
 			]
 		},
 		{
@@ -46,6 +49,7 @@
 			"actions": [
 				{"action":"printLine", "value":"<p>Ceci est un message de test</p>"},
 				{"action":"showMedia", "media":"vid1"}
+				
 			]
 		}
 	]
