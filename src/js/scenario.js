@@ -145,6 +145,11 @@ NS.ScenarioPlayer.prototype.playCurrentStep = function(){
 		}
 		
 		fn.performCommand.apply(this._commandDispatcher[actionName], parameters);
+		// this part is used to tell the BrainModule that there are no more actions 
+		// and it can start animating
+		if(i == actions.length-1){
+			this._brainModule.playStep();
+		}
 	}	
 };
 

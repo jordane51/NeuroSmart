@@ -11,21 +11,11 @@ NS.BrainModule = function(domElement, brainUrl){
 };
 
 NS.BrainModule.prototype.availableCommands = function(){
-	return ["setOpacity", "setColor"];
+	return ["setOpacity", "setColor", "rotateCamera", "animationDuration"];
 }
 
 NS.BrainModule.prototype.performCommand = function(){
-	switch(arguments[0]){
-		case "setOpacity":
-			console.log(arguments[1], arguments[2]);
-			this._nsscene.setOpacity([arguments[1]], arguments[2]);
-		break;
-		case "setColor":
-			this._nsscene.setColor([arguments[1]], arguments[2]);
-		break;
-		default:
-		break;
-	}
+	this._nsscene.performCommand.apply(this._nsscene, arguments);
 };
 
 NS.BrainModule.prototype.isLoaded = function(){
@@ -53,7 +43,6 @@ NS.BrainModule.prototype.load = function(caller, callback){
 		}
 	
 	};
-	// TODO: change the show() in the other classes as well
 	
 	this._domElement = document.createElement("div");
 	this._domElement.id = "brainModule";
@@ -75,6 +64,9 @@ NS.BrainModule.prototype.hide = function(){
 	 this._parentDomElement.removeChild(this._domElement);
 };
 
+NS.BrainModule.prototype.playStep = function(){
+	this._nsscene.playAnimations();	
+};
 /* Class Scene
    Responsible for the view itself
 */
@@ -85,12 +77,33 @@ NS.Scene = function(domElement){
 	this._renderer = null;
 	this._camera = null;
 	this._controls = null;
+	this.animationManager = null;
+};
+
+NS.Scene.prototype.performCommand = function(){
+	switch(arguments[0]){
+		case "setOpacity":
+			console.log(arguments[1], arguments[2]);
+			this.setOpacity([arguments[1]], arguments[2]);
+		break;
+		case "setColor":
+			this.setColor([arguments[1]], arguments[2]);
+		break;
+		case "rotateCamera":
+			this.animationManager.addAnimatablePropertyToQueue.apply(this.animationManager, ["camera", this._camera, arguments[1], arguments[2], arguments[3]]);
+		break;
+		case "animationDuration":
+			this.animationManager.animationDuration = arguments[1];
+		default:
+		break;
+	}
 };
 
 NS.Scene.prototype.load = function(){
 	this._scene = new THREE.Scene();
 	this._renderer = new THREE.WebGLRenderer( { alpha: true } );
 	this._camera = new THREE.PerspectiveCamera( 75, 1, 0.1, 1000 );
+	this.animationManager = new NS.AnimationManager();
 	
 	// Controls setup
 	this._controls = new THREE.TrackballControls(this._camera, this._domElement);
@@ -152,6 +165,7 @@ NS.Scene.prototype.load = function(){
 	function animate(){
 		requestAnimationFrame(animate);
 		that._controls.update();
+		that.animationManager.update();
 		that._renderer.render(that._scene, that._camera);
 	}
 	
@@ -163,6 +177,13 @@ NS.Scene.prototype.load = function(){
 	
 	//this.renderer.domElement.onclick = clickHandler;
 }
+
+/*
+ * interactionEnable: true enables, false disables
+ */
+NS.Scene.prototype.setInteractionEnabled = function(interactionEnabled){
+	this._controls.enabled = interactionEnabled;
+};
 
 NS.Scene.prototype.addComponentsToScene = function(){
 	var keys = Object.getOwnPropertyNames(this._sceneObjects);
@@ -180,6 +201,10 @@ NS.Scene.prototype.addObject = function(nickName, objectOpacity, objectColor, ob
 					that._sceneObjects[nickName] = object;
 					callback.call(caller);
 	});
+};
+
+NS.Scene.prototype.playAnimations = function(){
+	this.animationManager.play(10.0);	
 };
 
 /* 
@@ -204,6 +229,83 @@ NS.Scene.prototype.setColor = function(arrayOfNickNames, color){
 	}
 };
 
+/*
+ * Push all the properties that need to be animated, then call Play and they will all be animated
+ * at the same time
+ * Animatable properties include coordinates and opacity
+ */
 NS.AnimationManager = function(){
+	this._animationQueue = [];
+	this._isAnimating = false;
+	this._lastTime = 0.0;
+	this._elapsedTime = 0.0;
 	
+	this.animationDuration;
+};
+
+NS.AnimationManager.prototype.addAnimatablePropertyToQueue = function(){
+	var animation = arguments;
+	this._animationQueue.push(animation);
+};
+
+NS.AnimationManager.prototype.update = function(){
+	if(this._isAnimating){
+		var time = Date.now();
+		var delta;
+		if(this._lastTime == 0){
+			delta  = 0.0;
+		} else {
+			delta = time - this._lastTime;
+		}
+		this._elapsedTime += delta;
+		
+		for(var i = 0; i < this._animationQueue.length; i++){
+			var animation = this._animationQueue[i];
+			var animationType = animation[0];
+			switch(animationType){
+				case "camera":
+					var camera = animation[1];
+					var destX = animation[2];
+					var destY = animation[3];
+					var destZ = animation[4];
+					
+					/*
+						camera.position.x = 200 * Math.cos(rotSpeed+=0.001) + 200 * Math.sin(rotSpeed+=0.001);
+						camera.position.z = 200 * Math.cos(rotSpeed+=0.001) - 200 * Math.sin(rotSpeed+=0.001);		
+					*/
+					
+					camera.position.x = destX * (this._elapsedTime / (this.animationDuration));
+					camera.position.y = destY * (this._elapsedTime / (this.animationDuration));
+					camera.position.z = destZ * (this._elapsedTime / (this.animationDuration));
+					//TODO: calculer la position de la caméra comme il le faut
+					//camera.lookAt(new THREE.Vector3(0, 0, 0));
+				break;
+				default:
+				break;
+			}
+		}
+
+		if(this._elapsedTime >= this.animationDuration*1000){
+			this._isAnimating = false;
+			this._animationQueue = [];
+		}
+	
+		this._lastTime = time;
+	}
+	
+	
+};
+
+/*
+ * Plays the animations in the queue for the given duration
+ */
+NS.AnimationManager.prototype.play = function(){
+	this._lastTime = 0.0;
+	this._elapsedTime = 0.0;
+	this._isAnimating = true;
+	/*for(var i = 0; i < this._animationQueue.length; i++){
+		var animation = this._animationQueue[i];
+		console.log(animation);
+		//animation.property = animation.target	
+	}*/
 };
