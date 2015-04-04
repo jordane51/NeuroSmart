@@ -4,7 +4,7 @@
 NS.BrainModule = function(domElement, brainUrl){
 	this._parentDomElement = domElement;
 	this._domElement = null;
-	this._brainUrl = "http://pdp.jord.fr/~jordane/src/resources/brain.json";
+	this._brainUrl = "resources/brain.json";
 	this._brain = null;
 	this._nsscene = null;
 	this._isLoaded = false;
@@ -265,20 +265,31 @@ NS.AnimationManager.prototype.update = function(){
 			switch(animationType){
 				case "camera":
 					var camera = animation[1];
-					var destX = animation[2];
-					var destY = animation[3];
+					var rotX = animation[2];
+					var rotY = animation[3];
 					var destZ = animation[4];
 					
+					var progress = (this._elapsedTime / (this.animationDuration*1000));
+					console.log(progress);
 					/*
 						camera.position.x = 200 * Math.cos(rotSpeed+=0.001) + 200 * Math.sin(rotSpeed+=0.001);
-						camera.position.z = 200 * Math.cos(rotSpeed+=0.001) - 200 * Math.sin(rotSpeed+=0.001);		
-					*/
+						camera.position.z = 200 * Math.cos(rotSpeed+=0.001) - 200 * Math.sin(rotSpeed+=0.001);	
+						
+						eyeX = pickObjX + radius*cos(phi)*sin(theta);
+						eyeY = pickObjY + radius*sin(phi)*sin(theta);
+						eyeZ = pickObjZ + radius*cos(theta);	
 					
-					camera.position.x = destX * (this._elapsedTime / (this.animationDuration));
-					camera.position.y = destY * (this._elapsedTime / (this.animationDuration));
-					camera.position.z = destZ * (this._elapsedTime / (this.animationDuration));
+					
+					
+					camera.position.x = destX * Math.cos(progress) + destX * Math.sin(progress);
+					camera.position.y = destY * Math.cos(progress);
+					camera.position.z = destZ * Math.cos(progress) - destZ * Math.sin(progress);
 					//TODO: calculer la position de la caméra comme il le faut
 					//camera.lookAt(new THREE.Vector3(0, 0, 0));
+					*/
+					camera.position.x = 0 + destZ * (Math.cos(rotX) * Math.sin(rotY));
+					camera.position.y = 0 + destZ * (Math.sin(rotX) * Math.sin(rotY));
+					camera.position.z = 0 + destZ * (Math.cos(rotY));
 				break;
 				default:
 				break;

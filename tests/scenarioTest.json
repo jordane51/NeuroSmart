@@ -32,8 +32,7 @@
 			"actions": [
 				{"action":"printLine", "value":"<p>Messsage !</p>"},
 				{"action":"showMedia", "media":"image1"},
-				{"action":"setOpacity", "object":"lh", "value":"0.0"},
-				{"action":"rotateCamera", "x":"10.0", "y":"10.0", "z":"0.0"},
+				{"action":"rotateCamera", "x":"20.0", "y":"10.0", "z":"200.0"},
 				{"action":"animationDuration", "value":"5.0"}
 			]
 		},
