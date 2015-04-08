@@ -4,17 +4,177 @@
 			"nickName":"lh",
 			"name":"Middle frontal gyrus",
 			"description":"Le Middle frontal gyrus est responsable de ? ",
-			"color":"#EE4000",
+			"color":"#FF99CC",
 			"opacity":"0.3",
 			"url":"http://pdp.jord.fr/~jordane/src/resources/lh.pial.obj"
-		},
+		},		
 		{
 			"nickName":"rh",
 			"name":"Middle frontal gyrus",
 			"description":"Le Middle frontal gyrus est responsable de ? ",
-			"color":"#EE4000",
+			"color":"#FF99CC",
 			"opacity":"0.3",
 			"url":"http://pdp.jord.fr/~jordane/src/resources/rh.pial.obj"
-		}
+		},
+		{
+			"nickName":"3vent",
+			"name":"3rd ventricule",
+			"description":"Le 3e ventricule est responsable de ? ",
+			"color":"#CCFF66",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/3rd-Ventricle.obj"
+		},
+		{
+			"nickName":"4vent",
+			"name":"4th ventricule",
+			"description":"Le 4e ventricule est responsable de ? ",
+			"color":"#CCFF33",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/4th-Ventricle.obj"
+		},
+		{
+			"nickName":"acar",
+			"name":"Accumbens area",
+			"description":"Accumbens area est responsable de ? ",
+			"color":"#00FFFF",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Accumbens-area.obj"
+		},
+		{
+			"nickName":"amy",
+			"name":"Amygdala",
+			"description":"l'amygdale est responsable de ? ",
+			"color":"#CC0000",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Amygdala.obj"
+		},
+		{
+			"nickName":"brStem",
+			"name":"Brain-Stem",
+			"description":"Brain-Stem est responsable de ? ",
+			"color":"#3300CC",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Brain-Stem.obj"
+		},
+		{
+			"nickName":"caud",
+			"name":"Caudate",
+			"description":"Caudate est responsable de ? ",
+			"color":"#0000FF",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Caudate.obj"
+		},
+		{
+			"nickName":"ccAnt",
+			"name":"CC_Anterior",
+			"description":"CC_Anterior est responsable de ? ",
+			"color":"#FF3300",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/CC_Anterior.obj"
+		},
+		{
+			"nickName":"ccCent",
+			"name":"CC_Central",
+			"description":"CC_Central est responsable de ? ",
+			"color":"#000099",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/CC_Central.obj"
+		},
+		{
+			"nickName":"ccMidAnt",
+			"name":"CC_Mid_Anterior",
+			"description":"CC_Mid_Anterior est responsable de ? ",
+			"color":"#CC6633",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/CC_Mid_Anterior.obj"
+		},
+		{
+			"nickName":"ccMidPost",
+			"name":"CC_Mid_Posterior",
+			"description":"CC_Mid_Posterior est responsable de ? ",
+			"color":"#CC0000",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/CC_Mid_Posterior.obj"
+		},
+		{
+			"nickName":"ccPost",
+			"name":"CC_Posterior",
+			"description":"CC_Posterior est responsable de ? ",
+			"color":"#FF66FF",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/CC_Posterior.obj"
+		},
+		{
+			"nickName":"CcCort",
+			"name":"Cerebellum-Cortex",
+			"description":"Cerebellum-Cortex est responsable de ? ",
+			"color":"#FF9933",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Cerebellum-Cortex.obj"
+		},
+		{
+			"nickName":"cerWhMat",
+			"name":"Cerebellum-White-Matter",
+			"description":"Cerebellum-White-Matter est responsable de ? ",
+			"color":"#66CC00",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Cerebellum-White-Matter.obj"
+		},
+		{
+			"nickName":"hippo",
+			"name":"Hippocampus",
+			"description":"Hippocampus est responsable de ? ",
+			"color":"#0099FF",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Hippocampus.obj"
+		},
+		{
+			"nickName":"infLatVent",
+			"name":"Inf-Lat-Vent",
+			"description":"Inf-Lat-Vent est responsable de ? ",
+			"color":"#990066",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Inf-Lat-Vent.obj"
+		},
+		{
+			"nickName":"latVent",
+			"name":"Lateral-Ventricle",
+			"description":"Lateral-Ventricle est responsable de ? ",
+			"color":"#336699",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Lateral-Ventricle.obj"
+		},
+		{
+			"nickName":"pall",
+			"name":"Pallidum",
+			"description":"Pallidum est responsable de ? ",
+			"color":"#CC00FF",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Pallidum.obj"
+		},
+		{
+			"nickName":"put",
+			"name":"Putamen",
+			"description":"Putamen est responsable de ? ",
+			"color":"#333300",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Putamen.obj"
+		},
+		{
+			"nickName":"thala",
+			"name":"Thalamus-Proper",
+			"description":"Thalamus-Proper est responsable de ? ",
+			"color":"#339933",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/Thalamus-Proper.obj"
+		},
+		{
+			"nickName":"ventDC",
+			"name":"VentralDC",
+			"description":"VentralDC est responsable de ? ",
+			"color":"#333333",
+			"opacity":"1",
+			"url":"http://pdp.jord.fr/~yanis/mesh/VentralDC.obj"
+		}		
 	]
 }

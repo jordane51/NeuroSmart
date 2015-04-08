@@ -36,14 +36,16 @@ body{
 	border-radius: 2px;
 	width: 50vw;
 	height: 30vh;
+	color: white;
 	overflow-y: auto;
 }
 
-#console .textArea{
+#consoleModule .textArea{
 	color: white;
 }
 
-#console .textArea p{
+#consoleModule .textArea p{
+	color: white;
 	margin: 0px 0px 0px 0px;
 }
 

@@ -32,8 +32,8 @@
 			"actions": [
 				{"action":"printLine", "value":"<p>Messsage !</p>"},
 				{"action":"showMedia", "media":"image1"},
-				{"action":"rotateCamera", "x":"20.0", "y":"10.0", "z":"200.0"},
-				{"action":"animationDuration", "value":"5.0"}
+				{"action":"rotateCamera", "x":"3.5", "y":"10.0", "z":"200.0"},
+				{"action":"animationDuration", "value":"3.0"}
 			]
 		},
 		{
@@ -42,7 +42,9 @@
 				{"action":"printLine", "value":"<p>La zone du cerveau x s'active</p>"},
 				{"action":"showMedia", "media":"image2"},
 				{"action":"setOpacity", "object":"lh", "value":"1.0"},
-				{"action":"setColor", "object":"lh", "value":"#20B2AA"}
+				{"action":"setColor", "object":"lh", "value":"#20B2AA"},
+				{"action":"rotateCamera", "x":"30.0", "y":"10.0", "z":"250.0"},
+				{"action":"animationDuration", "value":"5.0"}
 			]
 		},
 		{
